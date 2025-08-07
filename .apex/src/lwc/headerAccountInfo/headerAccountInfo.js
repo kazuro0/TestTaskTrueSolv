@@ -1,7 +1,8 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, api } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 
 export default class HeaderAccountInfo extends LightningElement {
+    @api isManager;
     accountName;
     accountNumber;
     accountIndustry
