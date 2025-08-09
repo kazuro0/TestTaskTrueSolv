@@ -13,7 +13,7 @@ export default class ItemPurchaseTool extends LightningElement {
             this.isManager = data.fields.IsManager__c.value;
             console.log("Is manager: " + this.isManager);
         } else if (error) {
-            console.error('Ошибка получения пользователя:', error);
+            console.error('Ошибка получения пользователя: ', error);
         }
     }
 }
