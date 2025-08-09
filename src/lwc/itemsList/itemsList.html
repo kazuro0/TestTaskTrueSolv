@@ -1,33 +1,45 @@
 <template>
-    <div class="slds-box slds-theme_default container">
-        <lightning-input
-                class="search-bar"
-                type="search"
-                placeholder="Search by name or description"
-                value={searchKey}
-                onchange={handleSearchChange}>
-        </lightning-input>
-        <div class="items-grid">
-            <template if:true={filteredItems.length}>
-                <template for:each={filteredItems} for:item="item">
-                    <div key={item.Id} class="slds-box slds-m-around_small item-card">
-                        <!-- <img src={item.Image__c} alt={item.Name} style="width: 100px; height: 100px;" /> -->
-                        <p><strong>{item.Name}</strong></p>
-                        <p>{item.Description__c}</p>
-                        <p>Type: {item.Type__c}</p>
-                        <p>Family: {item.Family__c}</p>
-                        <p>Price: ${item.Price__c}</p>
-                        <div class="item-buttons">
-                            <lightning-button label="Details"></lightning-button>
-                            <lightning-button label="Add" variant="brand"></lightning-button>
+    <div class="container">
+        <div class="slds-box slds-theme_default items-list">
+            <lightning-input
+                    class="search-bar"
+                    type="search"
+                    placeholder="Search by name or description"
+                    value={searchKey}
+                    onchange={handleSearchChange}>
+            </lightning-input>
+            <div class="items-grid">
+                <template if:true={filteredItems.length}>
+                    <template for:each={filteredItems} for:item="item">
+                        <div key={item.Id} class="slds-box slds-m-around_small item-card">
+                            <!-- <img src={item.Image__c} alt={item.Name} style="width: 100px; height: 100px;" /> -->
+                            <p><strong>{item.Name}</strong></p>
+                            <p>{item.Description__c}</p>
+                            <p>Type: {item.Type__c}</p>
+                            <p>Family: {item.Family__c}</p>
+                            <p>Price: ${item.Price__c}</p>
+                            <div class="item-buttons">
+                                <lightning-button label="Details"></lightning-button>
+                                <lightning-button label="Add" variant="brand"></lightning-button>
+                            </div>
+                            <template if:true={isManager}>
+                                <lightning-button
+                                        label="Delete"
+                                        variant="destructive"
+                                        onclick={handleDelete}
+                                        data-id={item.Id}>
+                                </lightning-button>
+                            </template>
                         </div>
-                        <template if:true={isManager}>
-                            <lightning-button label="Delete" variant="destructive" onclick={handleDelete} data-id={item.Id}>
-                            </lightning-button>
-                        </template>
-                    </div>
+                    </template>
                 </template>
-            </template>
+                <template if:false={filteredItems.length}>
+                    <p class="slds-text-color_weak">No items found</p>
+                </template>
+            </div>
+        </div>
+        <div class="filters-list">
+            <c-filters-list onfilterchange={handleFilterChange}></c-filters-list>
         </div>
     </div>
 </template>

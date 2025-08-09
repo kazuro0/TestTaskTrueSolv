@@ -1,5 +1,31 @@
 <template>
-    <div class="slds-box slds-theme_default">
+    <div class="slds-box slds-theme_default filter-container">
+        <p class="slds-text-title_bold">Type</p>
+        <template for:each={typeOptions} for:item="opt">
+            <lightning-input
+                    key={opt.value}
+                    type="checkbox"
+                    label={opt.label}
+                    value={opt.value}
+                    onchange={handleTypeChange}>
+            </lightning-input>
+        </template>
 
+        <p class="slds-text-title_bold slds-m-top_medium">Family</p>
+        <template for:each={familyOptions} for:item="opt">
+            <lightning-input
+                    key={opt.value}
+                    type="checkbox"
+                    label={opt.label}
+                    value={opt.value}
+                    onchange={handleFamilyChange}>
+            </lightning-input>
+        </template>
+
+        <lightning-button
+                label="Clear Filters"
+                onclick={handleClear}
+                class="slds-m-top_small">
+        </lightning-button>
     </div>
 </template>

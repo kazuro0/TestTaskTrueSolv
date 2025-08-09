@@ -6,6 +6,13 @@
     overflow-y: auto;
 }
 
+.container {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 10px;
+}
+
 .item-card {
     /*background: white;*/
     /*border: 1px solid #d8dde6;*/

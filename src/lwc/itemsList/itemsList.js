@@ -6,33 +6,47 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export default class ItemsList extends LightningElement {
     @api isManager;
     @track items = [];
-    @track searchKey = '';
+    @track filteredItems = [];
+    searchKey = '';
+    selectedTypes = [];
+    selectedFamilies = [];
     error;
 
     @wire(getItems)
     wiredItems({ data, error }) {
         if (data) {
             this.items = data;
-            this.error = undefined;
+            this.filteredItems = data;
         } else if (error) {
             this.error = error;
-            this.items = [];
         }
-    }
-
-    get filteredItems() {
-        if (!this.searchKey) {
-            return this.items;
-        }
-        const key = this.searchKey.toLowerCase();
-        return this.items.filter(item =>
-            (item.Name && item.Name.toLowerCase().includes(key)) ||
-            (item.Description__c && item.Description__c.toLowerCase().includes(key))
-        );
     }
 
     handleSearchChange(event) {
-        this.searchKey = event.target.value;
+        this.searchKey = event.target.value.toLowerCase();
+        this.applyFilters();
+    }
+
+    handleFilterChange(event) {
+        this.selectedTypes = event.detail.types;
+        this.selectedFamilies = event.detail.families;
+        this.applyFilters();
+    }
+
+    applyFilters() {
+        this.filteredItems = this.items.filter(item => {
+            const matchesSearch =
+                item.Name.toLowerCase().includes(this.searchKey) ||
+                (item.Description__c && item.Description__c.toLowerCase().includes(this.searchKey));
+
+            const matchesType =
+                this.selectedTypes.length === 0 || this.selectedTypes.includes(item.Type__c);
+
+            const matchesFamily =
+                this.selectedFamilies.length === 0 || this.selectedFamilies.includes(item.Family__c);
+
+            return matchesSearch && matchesType && matchesFamily;
+        });
     }
 
     handleDelete(event) {
@@ -40,6 +54,7 @@ export default class ItemsList extends LightningElement {
         deleteItem({ itemId })
             .then(() => {
                 this.items = this.items.filter(item => item.Id !== itemId);
+                this.applyFilters();
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Success',
