@@ -26,7 +26,7 @@ export default class ItemPurchaseTool extends NavigationMixin(LightningElement) 
         if (data) {
             this.isManager = data.fields.IsManager__c.value;
         } else if (error) {
-            console.error('Ошибка получения пользователя: ', error);
+            console.error('isManager error: ', error);
         }
     }
 
@@ -63,6 +63,12 @@ export default class ItemPurchaseTool extends NavigationMixin(LightningElement) 
                 detail: { id: event.detail.id }
             })
         );
+
+        console.log('handleSuccess called, itemsList:', this.template.querySelector('c-items-list'));
+        const itemsList = this.template.querySelector('c-items-list');
+        if (itemsList) {
+            itemsList.refreshItems();
+        }
     }
 
     handleAddToCart(event) {
@@ -122,7 +128,7 @@ export default class ItemPurchaseTool extends NavigationMixin(LightningElement) 
             };
         });
 
-        console.log('Creating purchase with:', this.accountId, JSON.stringify(lines));
+        // console.log('Creating purchase with:', this.accountId, JSON.stringify(lines));
 
         createPurchaseWithLines({
             clientId: this.accountId,

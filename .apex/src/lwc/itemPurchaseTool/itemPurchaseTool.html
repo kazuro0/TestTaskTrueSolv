@@ -13,12 +13,11 @@
                                 <h2 id="modal-heading" class="slds-text-heading_medium">Create New Item</h2>
                             </header>
                             <div class="slds-modal__content">
-                                <lightning-record-edit-form object-api-name="Item__c" onsuccess={handleSuccess} oncancel={closeModal}>
+                                <lightning-record-edit-form object-api-name="Item__c" onsuccess={handleSuccess} onerror={handleError} oncancel={closeModal}>
                                     <lightning-input-field field-name="Name" required></lightning-input-field>
                                     <lightning-input-field field-name="Description__c" required></lightning-input-field>
                                     <lightning-input-field field-name="Type__c" required></lightning-input-field>
                                     <lightning-input-field field-name="Family__c" required></lightning-input-field>
-                                    <lightning-input-field field-name="Image__c" required></lightning-input-field>
                                     <lightning-input-field field-name="Price__c" required></lightning-input-field>
 
                                     <footer class="slds-modal__footer">
@@ -34,7 +33,6 @@
             </div>
             <div>
                 <p>{accountName}</p>
-                <p>{accountId}</p>
             </div>
             <div>
                 <p>{accountNumber}</p>

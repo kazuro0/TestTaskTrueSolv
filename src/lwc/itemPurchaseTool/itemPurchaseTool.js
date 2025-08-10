@@ -63,6 +63,12 @@ export default class ItemPurchaseTool extends NavigationMixin(LightningElement) 
                 detail: { id: event.detail.id }
             })
         );
+
+        console.log('handleSuccess called, itemsList:', this.template.querySelector('c-items-list'));
+        const itemsList = this.template.querySelector('c-items-list');
+        if (itemsList) {
+            itemsList.refreshItems();
+        }
     }
 
     handleAddToCart(event) {

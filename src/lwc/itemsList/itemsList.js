@@ -2,25 +2,57 @@ import { LightningElement, wire, track, api } from 'lwc';
 import getItems from '@salesforce/apex/ItemController.getItems';
 import deleteItem from '@salesforce/apex/ItemController.deleteItem';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { refreshApex } from '@salesforce/apex';
 
 export default class ItemsList extends LightningElement {
     @api isManager;
     @track items = [];
     @track filteredItems = [];
+
     searchKey = '';
     selectedTypes = [];
     selectedFamilies = [];
     error;
 
+    @track wiredItemsResult;
+
     @wire(getItems)
-    wiredItems({ data, error }) {
+    wiredItems(result) {
+        this.wiredItemsResult = result;
+        const { data, error } = result;
         if (data) {
             this.items = data;
             this.filteredItems = data;
         } else if (error) {
-            this.error = error;
+            console.error('Error loading items', error);
         }
     }
+
+    @api
+    async refreshItems() {
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        try {
+            await refreshApex(this.wiredItemsResult);
+            console.log('Items list refreshed successfully');
+        } catch (error) {
+            console.error('Error refreshing items', error);
+            throw error;
+        }
+    }
+
+
+    // handleItemCreated() {
+    //     getItems()
+    //         .then(data => {
+    //             this.items = data;
+    //             this.filteredItems = data;
+    //             this.applyFilters();
+    //         })
+    //         .catch(error => {
+    //             console.error('Error refreshing items', error);
+    //         });
+    // }
 
     handleSearchChange(event) {
         this.searchKey = event.target.value.toLowerCase();

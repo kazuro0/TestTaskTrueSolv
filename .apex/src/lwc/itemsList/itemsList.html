@@ -12,7 +12,12 @@
                 <template if:true={filteredItems.length}>
                     <template for:each={filteredItems} for:item="item">
                         <div key={item.Id} class="slds-box slds-m-around_small item-card">
-                            <!-- <img src={item.Image__c} alt={item.Name} style="width: 100px; height: 100px;" /> -->
+                            <template if:true={item.Image__c}>
+                                <img src={item.Image__c} alt={item.Name} style="width: 100px; height: 100px;" />
+                            </template>
+                            <template if:false={item.Image__c}>
+                                <div class="image-placeholder">No image available</div>
+                            </template>
                             <p><strong>{item.Name}</strong></p>
                             <p>{item.Description__c}</p>
                             <p>Type: {item.Type__c}</p>
