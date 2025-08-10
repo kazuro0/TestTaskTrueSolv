@@ -73,4 +73,12 @@ export default class ItemsList extends LightningElement {
                 );
             });
     }
+
+    handleAddClick(event) {
+        const itemId = event.target.dataset.id;
+        const item = this.filteredItems.find(i => i.Id === itemId);
+        if (item) {
+            this.dispatchEvent(new CustomEvent('addtocart', { detail: item }));
+        }
+    }
 }

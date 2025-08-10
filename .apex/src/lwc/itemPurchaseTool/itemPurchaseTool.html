@@ -1,8 +1,91 @@
 <template>
     <div class="slds-box slds-theme_default main">
-        <c-header-account-info is-manager={isManager}></c-header-account-info>
+        <div class="slds-box slds-theme_default header">
+            <div>
+                <template if:true={isManager}>
+                    <lightning-button label="Create Item" onclick={openModal}></lightning-button>
+                </template>
+
+                <template if:true={isModalOpen}>
+                    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <h2 id="modal-heading" class="slds-text-heading_medium">Create New Item</h2>
+                            </header>
+                            <div class="slds-modal__content">
+                                <lightning-record-edit-form object-api-name="Item__c" onsuccess={handleSuccess} oncancel={closeModal}>
+                                    <lightning-input-field field-name="Name" required></lightning-input-field>
+                                    <lightning-input-field field-name="Description__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Type__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Family__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Image__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Price__c" required></lightning-input-field>
+
+                                    <footer class="slds-modal__footer">
+                                        <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
+                                        <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+                                    </footer>
+                                </lightning-record-edit-form>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </div>
+            <div>
+                <p>{accountName}</p>
+                <p>{accountId}</p>
+            </div>
+            <div>
+                <p>{accountNumber}</p>
+            </div>
+            <div>
+                <p>{accountIndustry}</p>
+            </div>
+            <div>
+                <lightning-button label="Cart" onclick={openCartModal} class="slds-m-left_x-small"></lightning-button>
+
+                <template if:true={isCartModalOpen}>
+                    <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <h2 class="slds-text-heading_medium">Your Cart</h2>
+                            </header>
+                            <div class="slds-modal__content">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <template for:each={cartItemsWithTotal} for:item="item">
+                                        <tr key={item.Id}>
+                                            <td>{item.Name}</td>
+                                            <td>${item.Price__c}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>${item.totalPrice}</td>
+                                        </tr>
+                                    </template>
+                                    </tbody>
+                                </table>
+                                <p class="slds-m-top_medium"><strong>Grand Total:</strong> ${cartTotal}</p>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <lightning-button label="Close" onclick={closeCartModal}></lightning-button>
+                                <lightning-button variant="brand" label="Checkout" onclick={handleCheckout}></lightning-button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </div>
+        </div>
         <div class="container">
-            <c-items-list is-manager={isManager}></c-items-list>
+            <c-items-list key={listKey} is-manager={isManager} onaddtocart={handleAddToCart}></c-items-list>
         </div>
     </div>
 </template>

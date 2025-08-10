@@ -20,7 +20,7 @@
                             <p>Price: ${item.Price__c}</p>
                             <div class="item-buttons">
                                 <lightning-button label="Details"></lightning-button>
-                                <lightning-button label="Add" variant="brand"></lightning-button>
+                                <lightning-button label="Add" variant="brand" data-id={item.Id} onclick={handleAddClick}></lightning-button>
                             </div>
                             <template if:true={isManager}>
                                 <lightning-button
