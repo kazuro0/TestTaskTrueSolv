@@ -3,11 +3,17 @@ import getItems from '@salesforce/apex/ItemController.getItems';
 import deleteItem from '@salesforce/apex/ItemController.deleteItem';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
+import { getRecord } from 'lightning/uiRecordApi';
+import USER_ID from '@salesforce/user/Id';
+
+const FIELDS = ['User.IsDev__c'];
 
 export default class ItemsList extends LightningElement {
     @api isManager;
     @track items = [];
     @track filteredItems = [];
+
+    isDev;
 
     searchKey = '';
     selectedTypes = [];
@@ -15,6 +21,32 @@ export default class ItemsList extends LightningElement {
     error;
 
     @track wiredItemsResult;
+
+    @track selectedItem = null;
+    @track isDetailsModalOpen = false;
+
+    @wire(getRecord, { recordId: USER_ID, fields: FIELDS })
+    wiredUser({ error, data }) {
+        if (data) {
+            this.isDev = data.fields.IsDev__c.value;
+        } else if (error) {
+            console.error('IsDev error: ', error);
+        }
+    }
+
+    handleDetailsClick(event) {
+        const itemId = event.target.dataset.id;
+        const item = this.filteredItems.find(i => i.Id === itemId);
+        if (item) {
+            this.selectedItem = item;
+            this.isDetailsModalOpen = true;
+        }
+    }
+
+    closeDetailsModal() {
+        this.isDetailsModalOpen = false;
+        this.selectedItem = null;
+    }
 
     @wire(getItems)
     wiredItems(result) {
@@ -111,6 +143,13 @@ export default class ItemsList extends LightningElement {
         const item = this.filteredItems.find(i => i.Id === itemId);
         if (item) {
             this.dispatchEvent(new CustomEvent('addtocart', { detail: item }));
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'The item has been added to the cart.',
+                    variant: 'success'
+                })
+            );
         }
     }
 }

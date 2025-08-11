@@ -1,10 +1,12 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, track, wire, api } from 'lwc';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 import ITEM_OBJECT from '@salesforce/schema/Item__c';
 import TYPE_FIELD from '@salesforce/schema/Item__c.Type__c';
 import FAMILY_FIELD from '@salesforce/schema/Item__c.Family__c';
 
 export default class FilterList extends LightningElement {
+    @api itemsCount = 0;
+
     @track selectedTypes = [];
     @track selectedFamilies = [];
     @track typeOptions = [];

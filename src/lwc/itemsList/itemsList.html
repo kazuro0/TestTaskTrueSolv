@@ -13,21 +13,19 @@
                     <template for:each={filteredItems} for:item="item">
                         <div key={item.Id} class="slds-box slds-m-around_small item-card">
                             <template if:true={item.Image__c}>
-                                <img src={item.Image__c} alt={item.Name} style="width: 100px; height: 100px;" />
+                                <img src={item.Image__c} alt={item.Name} style="width: 200px; height: 200px;" />
                             </template>
                             <template if:false={item.Image__c}>
                                 <div class="image-placeholder">No image available</div>
                             </template>
                             <p><strong>{item.Name}</strong></p>
                             <p>{item.Description__c}</p>
-                            <p>Type: {item.Type__c}</p>
-                            <p>Family: {item.Family__c}</p>
                             <p>Price: ${item.Price__c}</p>
                             <div class="item-buttons">
-                                <lightning-button label="Details"></lightning-button>
+                                <lightning-button label="Details" data-id={item.Id} onclick={handleDetailsClick}></lightning-button>
                                 <lightning-button label="Add" variant="brand" data-id={item.Id} onclick={handleAddClick}></lightning-button>
                             </div>
-                            <template if:true={isManager}>
+                            <template if:true={isDev}>
                                 <lightning-button
                                         label="Delete"
                                         variant="destructive"
@@ -44,7 +42,41 @@
             </div>
         </div>
         <div class="filters-list">
-            <c-filters-list onfilterchange={handleFilterChange}></c-filters-list>
+            <c-filters-list
+                    onfilterchange={handleFilterChange}
+                    items-count={filteredItems.length}>
+            </c-filters-list>
         </div>
+        <template if:true={isDetailsModalOpen}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading" class="slds-text-heading_medium">{selectedItem.Name}</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium description">
+                        <div class="desc-image">
+                            <template if:true={selectedItem.Image__c}>
+                                <img src={selectedItem.Image__c} alt={selectedItem.Name} style="width: 200px; height: 200px;" />
+                            </template>
+                        </div>
+                        <div class="desc-text">
+                            <p class="p-desc-desc">{selectedItem.Description__c}</p>
+                            <div class="fam-n-type">
+                                <p><strong>Type:</strong> {selectedItem.Type__c}</p>
+                                <p><strong>Family:</strong> {selectedItem.Family__c}</p>
+                            </div>
+                            <div class="sp"></div>
+                            <div class="desc-price">
+                                <p>Price: <strong>${selectedItem.Price__c}</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Close" onclick={closeDetailsModal}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
     </div>
 </template>

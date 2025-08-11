@@ -1,0 +1,15 @@
+.filter-container {
+    align-self: stretch;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1.9rem;
+}
+
+.sp {
+    height: 100%;
+}
+
+.counter {
+    margin-top: 15px;
+}

@@ -21,11 +21,13 @@
                     onchange={handleFamilyChange}>
             </lightning-input>
         </template>
-
+        <p class="slds-m-bottom_small counter">Number of items displayed: {itemsCount}</p>
+        <div class="sp"></div>
         <lightning-button
                 label="Clear Filters"
                 onclick={handleClear}
                 class="slds-m-top_small">
+                stretch
         </lightning-button>
     </div>
 </template>
