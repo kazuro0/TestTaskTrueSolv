@@ -1,8 +1,21 @@
 public with sharing class PurchaseController {
 	@AuraEnabled
 	public static Id createPurchaseWithLines(Id clientId, List<PurchaseLineWrapper> lines) {
-//		System.debug('Received clientId: ' + clientId);
-//		System.debug('Received lines: ' + lines);
+		if (clientId == null) {
+			throw new AuraHandledException('Client ID cannot be null');
+		}
+		if (lines == null) {
+			lines = new List<PurchaseLineWrapper>();
+		}
+		for (PurchaseLineWrapper line : lines) {
+			if (line.amount < 0) {
+				throw new AuraHandledException('Amount cannot be negative');
+			}
+			if (line.unitCost < 0) {
+				throw new AuraHandledException('Unit cost cannot be negative');
+			}
+		}
+
 		Purchase__c purchase = new Purchase__c(ClientId__c = clientId);
 		insert purchase;
 

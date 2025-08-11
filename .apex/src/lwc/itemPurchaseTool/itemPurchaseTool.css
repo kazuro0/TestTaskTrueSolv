@@ -21,3 +21,7 @@
     justify-content: flex-end;
     gap: 15px;
 }
+
+.modal-create {
+    padding: 15px;
+}

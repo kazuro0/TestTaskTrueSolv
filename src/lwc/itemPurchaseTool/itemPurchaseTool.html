@@ -14,13 +14,15 @@
                             </header>
                             <div class="slds-modal__content">
                                 <lightning-record-edit-form object-api-name="Item__c" onsuccess={handleSuccess} onerror={handleError} oncancel={closeModal}>
-                                    <lightning-input-field field-name="Name" required></lightning-input-field>
-                                    <lightning-input-field field-name="Description__c" required></lightning-input-field>
-                                    <lightning-input-field field-name="Type__c" required></lightning-input-field>
-                                    <lightning-input-field field-name="Family__c" required></lightning-input-field>
-                                    <lightning-input-field field-name="Price__c" required></lightning-input-field>
+                                    <div class="modal-create">
+                                        <lightning-input-field field-name="Name" required></lightning-input-field>
+                                        <lightning-input-field field-name="Description__c" required></lightning-input-field>
+                                        <lightning-input-field field-name="Type__c" required></lightning-input-field>
+                                        <lightning-input-field field-name="Family__c" required></lightning-input-field>
+                                        <lightning-input-field field-name="Price__c" required></lightning-input-field>
+                                    </div>
 
-                                    <footer class="slds-modal__footer">
+                                    <footer class="slds-modal__footer buttons">
                                         <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
                                         <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
                                     </footer>
